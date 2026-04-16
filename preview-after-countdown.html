@@ -1,125 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Happy 25th Birthday</title>
-  <style>
-    :root{
-      --bg:#f8f4f1; --burgundy:#7a1730; --text:#3a1220; --muted:#6d3a45;
-      --glass:rgba(255,255,255,.74); --border:rgba(122,23,48,.12);
-      --shadow:0 20px 70px rgba(76,13,28,.12)
-    }
-    *{box-sizing:border-box} html,body{margin:0;padding:0}
-    body{font-family:Georgia,"Times New Roman",serif;color:var(--text);
-      background:radial-gradient(circle at top,#fff 0%,var(--bg) 45%),linear-gradient(180deg,#fff 0%,var(--bg) 100%);overflow-x:hidden}
-    .screen{position:relative;min-height:100vh;opacity:0;visibility:hidden;transform:translateY(12px);
-      transition:opacity .9s ease,transform .9s ease,visibility .9s ease;z-index:2;display:none}
-    .screen.active{opacity:1;visibility:visible;transform:translateY(0);display:block}
-    .wrap{width:min(1180px,calc(100% - 32px));margin:0 auto;position:relative;z-index:4}
-    .hero{min-height:100vh;display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:center;padding:48px 0}
-    .bg-glow,.bg-glow2,.bg-ring,.bg-ring2,.bg-mesh{position:fixed;pointer-events:none;z-index:0}
-    .bg-glow{width:420px;height:420px;left:-120px;top:40px;border-radius:999px;background:rgba(122,23,48,.08);filter:blur(52px)}
-    .bg-glow2{width:360px;height:360px;right:-60px;top:10px;border-radius:999px;background:rgba(185,122,136,.18);filter:blur(54px)}
-    .bg-ring,.bg-ring2{border-radius:999px;border:1px solid rgba(122,23,48,.10)}
-    .bg-ring{width:240px;height:240px;left:36px;top:90px}.bg-ring2{width:300px;height:300px;right:40px;bottom:30px}
-    .bg-mesh{inset:0;opacity:.055;background-image:linear-gradient(to right,var(--burgundy) 1px,transparent 1px),linear-gradient(to bottom,var(--burgundy) 1px,transparent 1px);background-size:92px 92px}
-    .petals{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:3}
-    .petal{position:absolute;top:-12vh;background:linear-gradient(180deg,#8f1c37,#bf7284);border-radius:100% 0 100% 0;opacity:.5;box-shadow:0 6px 18px rgba(122,23,48,.18);animation:fall linear infinite;filter:blur(.2px)}
-    @keyframes fall{0%{transform:translateY(-14vh) translateX(0) rotate(0deg);opacity:0}8%{opacity:.55}50%{transform:translateY(55vh) translateX(18px) rotate(110deg)}100%{transform:translateY(112vh) translateX(-18px) rotate(250deg);opacity:0}}
-    .music-btn{position:fixed;top:18px;right:18px;z-index:20;border:1px solid var(--border);background:rgba(255,255,255,.86);color:var(--burgundy);border-radius:999px;padding:12px 16px;cursor:pointer;font-size:12px;letter-spacing:.2em;text-transform:uppercase;box-shadow:var(--shadow)}
-    .pill{display:inline-flex;align-items:center;gap:10px;padding:11px 16px;border:1px solid var(--border);background:rgba(255,255,255,.70);border-radius:999px;box-shadow:0 10px 34px rgba(76,13,28,.06);font-size:13px;letter-spacing:.08em;animation:fadeUp .9s ease both}
-    .eyebrow{margin:18px 0 12px;font-size:12px;letter-spacing:.35em;text-transform:uppercase;color:rgba(122,23,48,.72);animation:fadeUp 1.05s ease both}
-    h1{margin:0;font-weight:600;font-size:clamp(46px,8vw,86px);line-height:.95;animation:fadeUp 1.15s ease both}
-    h1 .accent{display:block;color:var(--burgundy)}
-    .lead{max-width:620px;font-size:18px;line-height:1.9;color:var(--muted);margin:20px 0 0;animation:fadeUp 1.25s ease both}
-    .cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px;animation:fadeUp 1.3s ease both}
-    .btn{border:none;border-radius:18px;padding:14px 22px;cursor:pointer;font-size:14px;letter-spacing:.06em;box-shadow:var(--shadow)}
-    .btn.primary{background:var(--burgundy);color:#fff}.btn.secondary{background:rgba(255,255,255,.82);color:var(--burgundy);border:1px solid var(--border)}
-    .card{background:var(--glass);border:1px solid var(--border);border-radius:34px;padding:30px;box-shadow:var(--shadow);backdrop-filter:blur(12px)}
-    .count-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}
-    .count-box{background:rgba(255,255,255,.78);border:1px solid rgba(122,23,48,.07);border-radius:28px;text-align:center;padding:20px 10px}
-    .count-value{font-size:clamp(30px,5vw,48px);font-weight:600;color:var(--burgundy)}.count-label{margin-top:8px;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:rgba(122,23,48,.64)}
-    .gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.gallery-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
-    .photo{position:relative;overflow:hidden;min-height:220px;border-radius:32px;background:#fff;border:1px solid rgba(255,255,255,.78);box-shadow:var(--shadow)}
-    .photo.large{grid-column:1 / span 2;min-height:340px}
-    .photo img{width:100%;height:100%;object-fit:cover;display:block}
-    .photo::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(58,18,32,.12),transparent 48%);pointer-events:none}
-    .section{padding:24px 0 40px}.letter,.reason{background:var(--glass);border:1px solid var(--border);box-shadow:var(--shadow);backdrop-filter:blur(12px)}
-    .letter{border-radius:34px;padding:30px}.letter h2,.reasons h2{margin:0 0 14px;font-size:38px}.letter p,.reason p{margin:0;font-size:18px;line-height:1.9;color:var(--muted)}
-    .reasons-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
-    .reason{border-radius:30px;padding:26px}.icon{width:48px;height:48px;display:grid;place-items:center;border-radius:18px;background:#f5e6ea;color:var(--burgundy);font-size:22px;margin-bottom:14px}
-    .footer{text-align:center;padding:36px 0 54px;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:rgba(122,23,48,.68)}
-    .fade-item{opacity:0;transform:translateY(18px)}.fade-item.in{animation:fadeUp .9s ease forwards}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-    @media (max-width:950px){.hero{grid-template-columns:1fr;gap:28px;padding-top:86px}.gallery-3{grid-template-columns:1fr 1fr 1fr}.reasons-grid{grid-template-columns:1fr}}
-    @media (max-width:720px){.count-grid,.gallery,.gallery-3{grid-template-columns:1fr 1fr}.photo.large{grid-column:auto;min-height:260px}}
-    @media (max-width:560px){.count-grid,.gallery,.gallery-3{grid-template-columns:1fr}.music-btn{top:12px;right:12px;padding:10px 12px}.lead,.letter p,.reason p{font-size:16px}.cta-row{gap:10px}.btn{width:100%}}
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Preview After Countdown</title>
+<style>
+:root{
+  --bg:#f8f4f1;--burgundy:#7a1730;--burgundy-dark:#4c0d1c;--text:#3a1220;--muted:#6d3a45;
+  --glass:rgba(255,255,255,.76);--border:rgba(122,23,48,.14);--shadow:0 20px 70px rgba(76,13,28,.14);
+  --overlay:rgba(58,18,32,.38)
+}
+*{box-sizing:border-box} html,body{margin:0;padding:0}
+body{font-family:Georgia,"Times New Roman",serif;color:var(--text);background:#f8f4f1;overflow-x:hidden}
+.bg-video{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:-4;background:#ddd}
+.video-overlay{position:fixed;inset:0;z-index:-3;background:linear-gradient(to bottom, rgba(255,255,255,.12), rgba(58,18,32,.30)),radial-gradient(circle at top, rgba(255,255,255,.18), transparent 45%),var(--overlay);backdrop-filter:blur(1px)}
+.bg-glow,.bg-glow2,.bg-ring,.bg-ring2,.bg-mesh{position:fixed;pointer-events:none;z-index:-2}
+.bg-glow{width:420px;height:420px;left:-120px;top:40px;border-radius:999px;background:rgba(122,23,48,.10);filter:blur(52px)}
+.bg-glow2{width:360px;height:360px;right:-60px;top:10px;border-radius:999px;background:rgba(185,122,136,.18);filter:blur(54px)}
+.bg-ring,.bg-ring2{border-radius:999px;border:1px solid rgba(255,255,255,.16)}
+.bg-ring{width:240px;height:240px;left:36px;top:90px}.bg-ring2{width:300px;height:300px;right:40px;bottom:30px}
+.bg-mesh{inset:0;opacity:.045;background-image:linear-gradient(to right, rgba(255,255,255,.6) 1px, transparent 1px),linear-gradient(to bottom, rgba(255,255,255,.6) 1px, transparent 1px);background-size:92px 92px}
+.petals{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:1}
+.petal{position:absolute;top:-12vh;background:linear-gradient(180deg,#8f1c37,#bf7284);border-radius:100% 0 100% 0;opacity:.52;box-shadow:0 6px 18px rgba(122,23,48,.18);animation:fall linear infinite;filter:blur(.2px)}
+@keyframes fall{0%{transform:translateY(-14vh) translateX(0) rotate(0deg);opacity:0}8%{opacity:.55}50%{transform:translateY(55vh) translateX(18px) rotate(110deg)}100%{transform:translateY(112vh) translateX(-18px) rotate(250deg);opacity:0}}
+.music-btn{position:fixed;top:18px;right:18px;z-index:20;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.86);color:var(--burgundy);border-radius:999px;padding:12px 16px;cursor:pointer;font-size:12px;letter-spacing:.2em;text-transform:uppercase;box-shadow:var(--shadow)}
+.screen{position:relative;min-height:100vh;opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .9s ease,transform .9s ease,visibility .9s ease;z-index:5;display:none}
+.screen.active{opacity:1;visibility:visible;transform:translateY(0);display:block}
+.wrap{width:min(1180px,calc(100% - 32px));margin:0 auto;position:relative;z-index:6}
+.hero{min-height:100vh;display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:center;padding:48px 0}
+.pill{display:inline-flex;align-items:center;gap:10px;padding:11px 16px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.70);border-radius:999px;box-shadow:0 10px 34px rgba(76,13,28,.06);font-size:13px;letter-spacing:.08em}
+.eyebrow{margin:18px 0 12px;font-size:12px;letter-spacing:.35em;text-transform:uppercase;color:rgba(255,255,255,.92);text-shadow:0 4px 24px rgba(58,18,32,.35)}
+h1{margin:0;font-weight:600;font-size:clamp(46px,8vw,86px);line-height:.95;color:#fff;text-shadow:0 8px 30px rgba(58,18,32,.30)}
+h1 .accent{display:block;color:#ffd8e0}
+.lead{max-width:620px;font-size:18px;line-height:1.9;color:#fff8fb;text-shadow:0 4px 24px rgba(58,18,32,.30);margin:20px 0 0}
+.card,.letter,.reason,.messages-wrap{background:var(--glass);border:1px solid rgba(255,255,255,.20);box-shadow:var(--shadow);backdrop-filter:blur(14px)}
+.card{border-radius:34px;padding:30px}
+.count-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}
+.count-box{background:rgba(255,255,255,.78);border:1px solid rgba(122,23,48,.07);border-radius:28px;text-align:center;padding:20px 10px}
+.count-value{font-size:clamp(30px,5vw,48px);font-weight:600;color:var(--burgundy)} .count-label{margin-top:8px;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:rgba(122,23,48,.64)}
+.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.gallery-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+.photo{position:relative;overflow:hidden;min-height:220px;border-radius:32px;background:#fff;border:1px solid rgba(255,255,255,.78);box-shadow:var(--shadow)}
+.photo.large{grid-column:1 / span 2;min-height:340px}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.section{padding:24px 0 40px}
+.letter,.messages-wrap{border-radius:34px;padding:30px}
+.letter h2,.messages-wrap h2,.reasons h2{margin:0 0 14px;font-size:38px;color:var(--burgundy-dark)}
+.letter p,.reason p,.message-note{margin:0;font-size:18px;line-height:1.9;color:var(--muted)}
+.greet-form{margin-top:22px;display:grid;gap:12px}
+.greet-form label{font-size:13px;letter-spacing:.08em;color:var(--burgundy);text-transform:uppercase}
+.greet-form input,.greet-form textarea{width:100%;border:1px solid rgba(122,23,48,.14);border-radius:18px;padding:14px 16px;background:rgba(255,255,255,.78);font:inherit;color:var(--text);outline:none}
+.greet-form textarea{min-height:110px;resize:vertical}
+.form-meta{font-size:13px;color:var(--muted);margin-top:10px}
+.btn{border:none;border-radius:18px;padding:14px 22px;cursor:pointer;font-size:14px;letter-spacing:.06em;box-shadow:var(--shadow)}
+.btn.primary{background:var(--burgundy);color:#fff}.btn.secondary{background:rgba(255,255,255,.82);color:var(--burgundy);border:1px solid var(--border)}
+.reasons-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
+.reason{border-radius:30px;padding:26px}
+.icon{width:48px;height:48px;display:grid;place-items:center;border-radius:18px;background:#f5e6ea;color:var(--burgundy);font-size:22px;margin-bottom:14px}
+.clouds{position:relative;min-height:180px;display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:center;margin-top:18px}
+.cloud{max-width:280px;background:rgba(255,255,255,.90);border:1px solid rgba(122,23,48,.10);color:var(--burgundy-dark);padding:18px 20px;border-radius:999px;box-shadow:0 18px 50px rgba(76,13,28,.10);animation:cloudPop .7s ease both}
+.cloud small{display:block;margin-top:8px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;font-size:11px}
+@keyframes cloudPop{from{opacity:0;transform:scale(.8) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.footer{text-align:center;padding:36px 0 54px;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:rgba(255,255,255,.88);text-shadow:0 4px 24px rgba(58,18,32,.35)}
+.fade-item{opacity:0;transform:translateY(18px)} .fade-item.in{animation:fadeUp .9s ease forwards}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@media (max-width:950px){.hero{grid-template-columns:1fr;gap:28px;padding-top:86px}.gallery-3{grid-template-columns:1fr 1fr 1fr}.reasons-grid{grid-template-columns:1fr}}
+@media (max-width:720px){.count-grid,.gallery,.gallery-3{grid-template-columns:1fr 1fr}.photo.large{grid-column:auto;min-height:260px}}
+@media (max-width:560px){.count-grid,.gallery,.gallery-3{grid-template-columns:1fr}.music-btn{top:12px;right:12px;padding:10px 12px}.lead,.letter p,.reason p,.message-note{font-size:16px}}
+</style>
 </head>
 <body>
-<div class="bg-glow"></div><div class="bg-glow2"></div><div class="bg-ring"></div><div class="bg-ring2"></div><div class="bg-mesh"></div><div class="petals" id="petals"></div>
-<audio id="bgMusic" src="music/birthday-song.mp3" loop></audio>
-<button class="music-btn" id="musicBtn">Play Music</button>
 
-<section class="screen" id="countdownScreen">
-  <div class="wrap hero">
-    <div>
-      <div class="pill fade-item">A birthday surprise for Eryka</div>
-      <div class="eyebrow fade-item">April 17, 2026</div>
-      <h1 class="fade-item">Waiting for your<span class="accent">beautiful surprise</span></h1>
-      <p class="lead fade-item">A refined birthday reveal with a timeless burgundy-and-white aesthetic, created just for her 25th.</p>
-      <div class="gallery-3 fade-item">
-        <div class="photo"><img src="countdown-photos/countdown1.jpg" alt=""></div>
-        <div class="photo"><img src="countdown-photos/countdown2.jpg" alt=""></div>
-        <div class="photo"><img src="countdown-photos/countdown3.jpg" alt=""></div>
-      </div>
-    </div>
-    <div class="card fade-item">
-      <div class="eyebrow" style="margin-top:0;letter-spacing:.25em;">Countdown to her 25th</div>
-      <div class="count-grid">
-        <div class="count-box"><div class="count-value" id="days">0</div><div class="count-label">Days</div></div>
-        <div class="count-box"><div class="count-value" id="hours">0</div><div class="count-label">Hours</div></div>
-        <div class="count-box"><div class="count-value" id="minutes">0</div><div class="count-label">Minutes</div></div>
-        <div class="count-box"><div class="count-value" id="seconds">0</div><div class="count-label">Seconds</div></div>
-      </div>
-      <p class="lead" style="font-size:15px;max-width:none;margin-top:20px;">The surprise opens automatically the moment the countdown ends.</p>
-      <div class="cta-row"><button class="btn primary">Her Special Day</button><button class="btn secondary">Luxury Reveal</button></div>
-    </div>
-  </div>
-</section>
+  <video class="bg-video" autoplay muted loop playsinline>
+    <source src="video/background.mp4" type="video/mp4">
+  </video>
+  <div class="video-overlay"></div>
+  <div class="bg-glow"></div><div class="bg-glow2"></div><div class="bg-ring"></div><div class="bg-ring2"></div><div class="bg-mesh"></div><div class="petals" id="petals"></div>
+  <audio id="bgMusic" src="music/birthday-song.mp3" loop></audio>
+  <button class="music-btn" id="musicBtn">Play Music</button>
 
-<section class="screen active" id="surpriseScreen">
-  <div class="wrap section">
-    <div class="hero" style="min-height:auto;padding-bottom:0;">
-      <div>
-        <div class="pill fade-item">Happy 25th Birthday, Eryka</div>
-        <div class="eyebrow fade-item">Elegant • Romantic • Timeless</div>
-        <h1 class="fade-item">To the woman who<span class="accent">makes life exquisite</span></h1>
-        <p class="lead fade-item">This is your day, your moment, your celebration.</p>
-        <div class="cta-row fade-item"><button class="btn primary">My Birthday Girl</button><button class="btn secondary">Happy 25th</button></div>
-      </div>
-      <div class="gallery fade-item">
-        <div class="photo large"><img src="surprise-photos/surprise1.jpg" alt=""></div>
-        <div class="photo"><img src="surprise-photos/surprise2.jpg" alt=""></div>
-        <div class="photo"><img src="surprise-photos/surprise3.jpg" alt=""></div>
-        <div class="photo"><img src="surprise-photos/surprise4.jpg" alt=""></div>
+<section class="screen" id="countdownScreen"></section>
+
+  <section class="screen active" id="surpriseScreen">
+    <div class="wrap section">
+      <div class="hero" style="min-height:auto;padding-bottom:0;">
+        <div>
+          <div class="pill fade-item">Happy 25th Birthday, Eryka</div>
+          <div class="eyebrow fade-item">Elegant • Romantic • Timeless</div>
+          <h1 class="fade-item">To the one i’d choose every time<span class="accent">always you</span></h1>
+          <p class="lead fade-item">Happy 25th, baby. you really different — in the best way.</p>
+        </div>
+        <div class="gallery fade-item">
+          <div class="photo large"><img src="surprise-photos/surprise1.jpg" alt=""></div>
+          <div class="photo"><img src="surprise-photos/surprise2.jpg" alt=""></div>
+          <div class="photo"><img src="surprise-photos/surprise3.jpg" alt=""></div>
+          <div class="photo"><img src="surprise-photos/surprise4.jpg" alt=""></div>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="wrap section"><div class="letter fade-item"><h2>A letter for you</h2><p>Happy 25th Birthday, Eryka. Today is all about you and the beautiful soul that you are. You deserve a love that feels intentional, soft, elegant, and unwavering. This little surprise is only a small reflection of how deeply I admire you. Thank you for your love, your grace, your strength, and every beautiful moment you give to my life. You are my answered prayer, my peace, and my favorite person. I love you more than words can ever fully hold.</p></div></div>
-  <div class="wrap section reasons">
-    <div class="eyebrow fade-item">Why you are adored</div><h2 class="fade-item">A few beautiful truths about you</h2>
-    <div class="reasons-grid">
-      <div class="reason fade-item"><div class="icon">♥</div><h3>Your heart</h3><p>You make love feel gentle, safe, and beautiful in the quietest ways.</p></div>
-      <div class="reason fade-item"><div class="icon">✦</div><h3>Your light</h3><p>You have a way of making ordinary days feel elegant and unforgettable.</p></div>
-      <div class="reason fade-item"><div class="icon">❀</div><h3>Your smile</h3><p>It still feels like my favorite place in the world.</p></div>
+
+    <div class="wrap section">
+      <div class="letter fade-item">
+        <h2>A letter for you</h2>
+        <p>
+          Happy 25th, Eryka.
+          you really different — in the best way.
+          you my calm, my home, my everything.
+          i love you, always.
+        </p>
+      </div>
     </div>
-  </div>
-  <div class="footer fade-item">Made with love for Eryka</div>
-</section>
+
+    <div class="wrap section">
+      <div class="messages-wrap fade-item">
+        <h2>Birthday messages for Eryka</h2>
+        <p class="message-note">Saved greetings show up here as soft little cloud bubbles after the countdown ends. Longer messages are auto-shortened so everything stays cute and readable.</p>
+        <div class="clouds" id="cloudsContainer"></div>
+      </div>
+    </div>
+
+    <div class="wrap section reasons">
+      <div class="eyebrow fade-item">Why you are adored</div>
+      <h2 class="fade-item" style="color:#fff;text-shadow:0 4px 24px rgba(58,18,32,.35)">A few beautiful truths about you</h2>
+      <div class="reasons-grid">
+        <div class="reason fade-item"><div class="icon">♥</div><h3>Your heart</h3><p>You make love feel gentle, safe, and beautiful in the quietest ways.</p></div>
+        <div class="reason fade-item"><div class="icon">✦</div><h3>Your light</h3><p>You have a way of making ordinary days feel elegant and unforgettable.</p></div>
+        <div class="reason fade-item"><div class="icon">❀</div><h3>Your smile</h3><p>It still feels like my favorite place in the world.</p></div>
+      </div>
+    </div>
+    <div class="footer fade-item">Made with love for Eryka</div>
+  </section>
 
 <script>
+const STORAGE_KEY = "erykaBirthdayGreetings";
+const MAX_GREETINGS = 100;
 const birthdayDate = new Date("2026-04-17T00:00:00").getTime();
 const countdownScreen = document.getElementById("countdownScreen");
 const surpriseScreen = document.getElementById("surpriseScreen");
@@ -127,12 +140,61 @@ const daysEl = document.getElementById("days");
 const hoursEl = document.getElementById("hours");
 const minutesEl = document.getElementById("minutes");
 const secondsEl = document.getElementById("seconds");
+const guestName = document.getElementById("guestName");
+const guestMessage = document.getElementById("guestMessage");
+const saveGreetingBtn = document.getElementById("saveGreetingBtn");
+const cloudsContainer = document.getElementById("cloudsContainer");
+
+function getGreetings() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    return Array.isArray(parsed) ? parsed : [];
+  } catch { return []; }
+}
+function setGreetings(list) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(list.slice(0, MAX_GREETINGS)));
+}
+function summarizeMessage(text) {
+  const clean = text.replace(/\s+/g, " ").trim();
+  if (clean.length <= 70) return clean;
+  return clean.slice(0, 67).trim() + "...";
+}
+function escapeHtml(str) {
+  return str.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+}
+function renderClouds() {
+  const greetings = getGreetings();
+  cloudsContainer.innerHTML = "";
+  if (!greetings.length) {
+    cloudsContainer.innerHTML = '<div class="cloud"><strong>No messages yet</strong><small>Be the first to greet Eryka</small></div>';
+    return;
+  }
+  greetings.forEach((g, i) => {
+    const cloud = document.createElement("div");
+    cloud.className = "cloud";
+    cloud.style.animationDelay = `${i * 0.06}s`;
+    cloud.innerHTML = `<div>${escapeHtml(summarizeMessage(g.message))}</div><small>from ${escapeHtml(g.name)}</small>`;
+    cloudsContainer.appendChild(cloud);
+  });
+}
+saveGreetingBtn.addEventListener("click", () => {
+  const name = guestName.value.trim();
+  const message = guestMessage.value.trim();
+  if (!name || !message) { alert("Please add both a name and a message."); return; }
+  const greetings = getGreetings();
+  if (greetings.length >= MAX_GREETINGS) { alert("Max 100 greetings reached."); return; }
+  greetings.push({ name: name.slice(0,40), message: message.slice(0,220) });
+  setGreetings(greetings);
+  guestName.value = "";
+  guestMessage.value = "";
+  alert("Greeting saved for Eryka.");
+});
 function updateCountdown() {
   const now = new Date().getTime();
   const distance = birthdayDate - now;
   if (distance <= 0) {
     countdownScreen.classList.remove("active");
-    setTimeout(() => { surpriseScreen.classList.add("active"); animateItems(surpriseScreen); }, 220);
+    setTimeout(() => { surpriseScreen.classList.add("active"); animateItems(surpriseScreen); renderClouds(); }, 220);
     daysEl.textContent = "0"; hoursEl.textContent = "0"; minutesEl.textContent = "0"; secondsEl.textContent = "0";
     return;
   }
@@ -149,7 +211,7 @@ function animateItems(scope) {
     requestAnimationFrame(() => item.classList.add("in"));
   });
 }
-animateItems(surpriseScreen);
+animateItems(surpriseScreen); renderClouds();
 const petalsWrap = document.getElementById("petals");
 for (let i = 0; i < 20; i++) {
   const petal = document.createElement("div");
